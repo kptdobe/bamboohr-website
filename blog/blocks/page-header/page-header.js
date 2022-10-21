@@ -23,7 +23,7 @@ export function createSharing(shareClass = 'page-header-share') {
     const a = document.createElement('a');
     a.href = button.url;
     a.target = '_blank';
-    a.innerHTML = `<img src="${window.hlx.codeBasePath}/icons/${button.icon}.svg" class="icon icon-${button.icon}">`;
+    a.innerHTML = `<img loading="lazy" src="${window.hlx.codeBasePath}/icons/${button.icon}.svg" class="icon icon-${button.icon}">`;
     div.append(a);
   });
   return (div);

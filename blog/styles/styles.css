@@ -316,6 +316,13 @@ main .title.section-header :is(h1, h2, h3, h4, h5, h6, div) {
   line-height: 44px;
 }
 
+@font-face {
+  font-family: 'Fira Sans-900-fallback';
+  size-adjust: 99.309%;
+  src: local("Arial");
+}
+
+
 .typ-hero-header,
 .typ-display1,
 .resources-guides main h1,
@@ -1480,7 +1487,7 @@ body.modal-open {
 }
 
 /* above the fold CSS goes here to squash CLS */
-
+main .section[data-section-status='loaded-below-the-fold'],
 main .section[data-section-status='loading'],
 main .section[data-section-status='initialized'] {
   display: none;

@@ -188,22 +188,7 @@ export function toCamelCase(name) {
  * Replace icons with inline SVG and prefix with codeBasePath.
  * @param {Element} element
  */
-function replaceIcons(element) {
-  element.querySelectorAll('img.icon').forEach((img) => {
-    const span = document.createElement('span');
-    span.className = img.className;
-    img.replaceWith(span);
-  });
-}
-
-/**
- * Replace icons with inline SVG and prefix with codeBasePath.
- * @param {Element} element
- */
 export function decorateIcons(element) {
-  // prepare for forward compatible icon handling
-  replaceIcons(element);
-
   const fetchBase = window.hlx.serverPath;
   element.querySelectorAll('span.icon').forEach((span) => {
     const iconName = span.className.split('icon-')[1];
@@ -416,7 +401,14 @@ export function updateSectionsStatus(main) {
         section.setAttribute('data-section-status', 'loading');
         break;
       } else {
-        section.setAttribute('data-section-status', 'loaded');
+        const { top } = section.getBoundingClientRect();
+        if (top < window.innerHeight) section.setAttribute('data-section-status', 'loaded');
+        else {
+          section.setAttribute('data-section-status', 'loaded-below-the-fold');
+          if (i === sections.length) {
+            sections.forEach((s) => { s.dataset.sectionStatus = 'loaded'; });
+          }
+        }
       }
     }
   }
@@ -496,6 +488,58 @@ export async function loadBlock(block, eager = false) {
       console.log(`failed to load block ${blockName}`, err);
     }
     block.setAttribute('data-block-status', 'loaded');
+  }
+}
+
+/**
+ * load LCP block and/or wait for LCP in default content.
+ */
+async function waitForLCP() {
+  const lcpCandidate = document.querySelector('main img');
+  await new Promise((resolve) => {
+    if (lcpCandidate && !lcpCandidate.complete) {
+      lcpCandidate.setAttribute('loading', 'eager');
+      lcpCandidate.addEventListener('load', () => resolve());
+      lcpCandidate.addEventListener('error', () => resolve());
+    } else {
+      resolve();
+    }
+  });
+}
+
+export async function loadSection(section, index, aboveTheFold = true) {
+  if (section.dataset.sectionStatus === 'initialized') {
+    section.dataset.sectionStatus = 'loading';
+    const blocks = [...section.querySelectorAll('div.block')];
+    for (let i = 0; i < blocks.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await loadBlock(blocks[i]);
+      if (index === 0 && i === 0) {
+      // eslint-disable-next-line no-await-in-loop
+        await waitForLCP();
+      }
+    }
+
+    if (aboveTheFold) {
+      section.dataset.sectionStatus = 'loaded';
+    } else {
+      section.dataset.sectionStatus = 'loaded-below-the-fold';
+    }
+  }
+}
+
+export async function loadSections(main, aboveTheFoldOnly) {
+  const sections = [...main.querySelectorAll('.section')];
+  for (let i = 0; i < sections.length; i += 1) {
+    const aboveTheFold = main.getBoundingClientRect().bottom < window.innerHeight;
+    if (!aboveTheFold && aboveTheFoldOnly) break;
+    // eslint-disable-next-line no-await-in-loop
+    await loadSection(sections[i], i, aboveTheFold);
+    if (i === sections.length - 1) {
+      document.fonts.ready.then(() => {
+        sections.forEach((s) => { s.dataset.sectionStatus = 'loaded'; });
+      });
+    }
   }
 }
 
@@ -614,32 +658,11 @@ export function addFavIcon(href) {
 }
 
 /**
- * load LCP block and/or wait for LCP in default content.
- */
-async function waitForLCP() {
-  // eslint-disable-next-line no-use-before-define
-  const lcpBlocks = LCP_BLOCKS;
-  const block = document.querySelector('.block');
-  const hasLCPBlock = (block && lcpBlocks.includes(block.getAttribute('data-block-name')));
-  if (hasLCPBlock) await loadBlock(block, true);
-
-  document.querySelector('body').classList.add('appear');
-  const lcpCandidate = document.querySelector('main img');
-  await new Promise((resolve) => {
-    if (lcpCandidate && !lcpCandidate.complete) {
-      lcpCandidate.setAttribute('loading', 'eager');
-      lcpCandidate.addEventListener('load', () => resolve());
-      lcpCandidate.addEventListener('error', () => resolve());
-    } else {
-      resolve();
-    }
-  });
-}
-
-/**
  * Decorates the page.
  */
 async function loadPage(doc) {
+  // eslint-disable-next-line no-use-before-define
+  await loadImmediate(doc);
   // eslint-disable-next-line no-use-before-define
   await loadEager(doc);
   // eslint-disable-next-line no-use-before-define
@@ -675,7 +698,6 @@ initHlx();
  * ------------------------------------------------------------
  */
 
-const LCP_BLOCKS = ['hero', 'featured-articles']; // add your LCP blocks to the list
 const RUM_GENERATION = 'project-1'; // add your RUM generation information here
 
 sampleRUM('top');
@@ -915,14 +937,23 @@ function linkImages(main) {
 export async function decorateMain(main) {
   linkImages(main);
 
-  decorateIcons(main);
   await buildAutoBlocks(main);
   setCategory();
   decorateSections(main);
   decorateBlocks(main);
   decorateButtons(main);
+  document.body.classList.add('appear');
   sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
   window.setTimeout(() => sampleRUM.observe(main.querySelectorAll('picture > img')), 1000);
+}
+
+async function loadImmediate(doc) {
+  decorateTemplateAndTheme();
+  const main = doc.querySelector('main');
+  if (main) {
+    await decorateMain(main);
+    await loadSection(main.querySelector('.section'), 0);
+  }
 }
 
 /**
@@ -972,11 +1003,18 @@ async function loadMartech() {
 async function loadEager(doc) {
   if (!window.hlx.lighthouse) loadMartech();
 
-  decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
-    await decorateMain(main);
-    await waitForLCP();
+    await loadSections(main, true);
+
+    const header = doc.querySelector('header');
+    const queryParams = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    });
+    if (queryParams.header === 'meganav') header.classList.add('header-meganav');
+
+    await loadHeader(header);
+    decorateIcons(main);
   }
 }
 
@@ -984,22 +1022,16 @@ async function loadEager(doc) {
  * loads everything that doesn't need to be delayed.
  */
 async function loadLazy(doc) {
-  const header = doc.querySelector('header');
-  const queryParams = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  });
-  if (queryParams.header === 'meganav') header.classList.add('header-meganav');
+  loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   const main = doc.querySelector('main');
-  await loadBlocks(main);
+  loadSections(main);
 
   const { hash } = window.location;
   const element = hash ? main.querySelector(hash) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadHeader(header);
   loadFooter(doc.querySelector('footer'));
 
-  loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   addFavIcon('https://www.bamboohr.com/favicon.ico');
 }
 
@@ -1121,4 +1153,11 @@ export function createElem(elemType, ...cssClass) {
   }
 
   return elem;
+}
+
+const params = new URLSearchParams(window.location.search);
+if (params.get('performance')) {
+  import('./performance.js').then((mod) => {
+    if (mod.default) mod.default();
+  });
 }
