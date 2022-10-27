@@ -501,6 +501,18 @@ table td {
   }
 }
 
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
 @media (min-width: 900px) {
   .typ-hero-header,
   .typ-display1,
@@ -1321,6 +1333,10 @@ main .section.gradient-section-4 > div:last-of-type {
 
 .gradient-section-4 {
   position: relative;
+}
+
+.bg-gray-2 {
+  background-color: var(--color-gray-2);
 }
 
 .bg-hex-1 img {
