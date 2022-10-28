@@ -21,20 +21,30 @@ export function sampleRUM(checkpoint, data = {}) {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
       const usp = new URLSearchParams(window.location.search);
-      const weight = (usp.get('rum') === 'on') ? 1 : 100; // with parameter, weight is 1. Defaults to 100.
+      const weight = usp.get('rum') === 'on' ? 1 : 100; // with parameter, weight is 1. Defaults to 100.
       // eslint-disable-next-line no-bitwise
-      const hashCode = (s) => s.split('').reduce((a, b) => (((a << 5) - a) + b.charCodeAt(0)) | 0, 0);
-      const id = `${hashCode(window.location.href)}-${new Date().getTime()}-${Math.random().toString(16).substr(2, 14)}`;
+      const hashCode = (s) => s.split('').reduce((a, b) => ((a << 5) - a + b.charCodeAt(0)) | 0, 0);
+      const id = `${hashCode(window.location.href)}-${new Date().getTime()}-${Math.random()
+        .toString(16)
+        .substr(2, 14)}`;
       const random = Math.random();
-      const isSelected = (random * weight < 1);
+      const isSelected = random * weight < 1;
       // eslint-disable-next-line object-curly-newline
       window.hlx.rum = { weight, id, random, isSelected };
     }
     const { random, weight, id } = window.hlx.rum;
-    if (random && (random * weight < 1)) {
+    if (random && random * weight < 1) {
       const sendPing = () => {
         // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
-        const body = JSON.stringify({ weight, id, referer: window.location.href, generation: RUM_GENERATION, checkpoint, ...data });
+        const body = JSON.stringify({
+          weight,
+          id,
+          referer: window.location.href,
+          // eslint-disable-next-line no-use-before-define
+          generation: RUM_GENERATION,
+          checkpoint,
+          ...data,
+        });
         const url = `https://rum.hlx.page/.rum/${weight}`;
         // eslint-disable-next-line no-unused-expressions
         navigator.sendBeacon(url, body);
@@ -65,40 +75,52 @@ export function sampleRUM(checkpoint, data = {}) {
   }
 }
 
-sampleRUM.blockobserver = (window.IntersectionObserver) ? new IntersectionObserver((entries) => {
-  entries
-    .filter((entry) => entry.isIntersecting)
-    .forEach((entry) => {
-      sampleRUM.blockobserver.unobserve(entry.target); // observe only once
-      const target = sampleRUM.targetselector(entry.target);
-      const source = sampleRUM.sourceselector(entry.target);
-      sampleRUM('viewblock', { target, source });
-    });
-}, { threshold: 0.25 }) : { observe: () => { } };
+sampleRUM.blockobserver = window.IntersectionObserver
+  ? new IntersectionObserver(
+      (entries) => {
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .forEach((entry) => {
+            sampleRUM.blockobserver.unobserve(entry.target); // observe only once
+            const target = sampleRUM.targetselector(entry.target);
+            const source = sampleRUM.sourceselector(entry.target);
+            sampleRUM('viewblock', { target, source });
+          });
+      },
+      { threshold: 0.25 }
+    )
+  : { observe: () => {} };
 
-sampleRUM.mediaobserver = (window.IntersectionObserver) ? new IntersectionObserver((entries) => {
-  entries
-    .filter((entry) => entry.isIntersecting)
-    .forEach((entry) => {
-      sampleRUM.mediaobserver.unobserve(entry.target); // observe only once
-      const target = sampleRUM.targetselector(entry.target);
-      const source = sampleRUM.sourceselector(entry.target);
-      sampleRUM('viewmedia', { target, source });
-    });
-}, { threshold: 0.25 }) : { observe: () => { } };
+sampleRUM.mediaobserver = window.IntersectionObserver
+  ? new IntersectionObserver(
+      (entries) => {
+        entries
+          .filter((entry) => entry.isIntersecting)
+          .forEach((entry) => {
+            sampleRUM.mediaobserver.unobserve(entry.target); // observe only once
+            const target = sampleRUM.targetselector(entry.target);
+            const source = sampleRUM.sourceselector(entry.target);
+            sampleRUM('viewmedia', { target, source });
+          });
+      },
+      { threshold: 0.25 }
+    )
+  : { observe: () => {} };
 
-sampleRUM.observe = ((elements) => {
+sampleRUM.observe = (elements) => {
   elements.forEach((element) => {
-    if (element.tagName.toLowerCase() === 'img'
-      || element.tagName.toLowerCase() === 'video'
-      || element.tagName.toLowerCase() === 'audio'
-      || element.tagName.toLowerCase() === 'iframe') {
+    if (
+      element.tagName.toLowerCase() === 'img' ||
+      element.tagName.toLowerCase() === 'video' ||
+      element.tagName.toLowerCase() === 'audio' ||
+      element.tagName.toLowerCase() === 'iframe'
+    ) {
       sampleRUM.mediaobserver.observe(element);
     } else {
       sampleRUM.blockobserver.observe(element);
     }
   });
-});
+};
 
 sampleRUM.targetselector = (element) => {
   let value = element.getAttribute('href') || element.currentSrc || element.getAttribute('src');
@@ -208,7 +230,10 @@ export function decorateIcons(element) {
   element.querySelectorAll('span.icon').forEach((span) => {
     const iconName = span.className.split('icon-')[1];
     fetch(`${fetchBase}${window.hlx.codeBasePath}/icons/${iconName}.svg`).then((resp) => {
-      if (resp.status === 200) resp.text().then((svg) => { span.innerHTML = svg; });
+      if (resp.status === 200)
+        resp.text().then((svg) => {
+          span.innerHTML = svg;
+        });
     });
   });
 }
@@ -269,6 +294,14 @@ export function decorateBlock(block) {
 
   const blockWrapper = block.parentElement;
   blockWrapper.classList.add(`${shortBlockName}-wrapper`);
+
+  [...block.classList]
+    .filter((filter) => filter.match(/^content-width-/g))
+    .forEach((style) => {
+      block.parentElement.classList.add(style);
+      block.classList.remove(style);
+    });
+  // eslint-disable-next-line no-use-before-define
   addWidthToParent(block);
 }
 
@@ -314,7 +347,8 @@ export function readBlockConfig(block) {
  */
 export function decorateBackgrounds($section) {
   const sectionKey = [...$section.parentElement.children].indexOf($section);
-  [...$section.classList].filter((filter) => filter.match(/^bg-/g))
+  [...$section.classList]
+    .filter((filter) => filter.match(/^bg-/g))
     .forEach((style, bgKey) => {
       const background = document.createElement('span');
       const fetchBase = window.hlx.serverPath;
@@ -329,33 +363,36 @@ export function decorateBackgrounds($section) {
 
           if (size) name += `-${size}`;
 
-          fetch(`${fetchBase}${window.hlx.codeBasePath}/styles/backgrounds/${name}.svg`)
-            .then((resp) => {
+          fetch(`${fetchBase}${window.hlx.codeBasePath}/styles/backgrounds/${name}.svg`).then(
+            (resp) => {
               // skip if not success
               if (resp.status !== 200) return;
 
               // put the svg in the span
-              resp.text()
-                .then((output) => {
-                  const element = document.createElement('div');
-                  let html = output;
+              resp.text().then((output) => {
+                const element = document.createElement('div');
+                let html = output;
 
-                  // get IDs
-                  const matches = html.matchAll(/id="([^"]+)"/g);
-                  // replace IDs
-                  [...matches].forEach(([, match], matchKey) => {
-                    html = html.replaceAll(match, `bg-id-${sectionKey}-${bgKey}-${sizeKey}-${matchKey}`);
-                  });
-
-                  element.innerHTML = html;
-                  const svg = element.firstChild;
-
-                  svg.classList.add(size || 'desktop');
-
-                  background.append(svg);
-                  $section.classList.add('has-bg');
+                // get IDs
+                const matches = html.matchAll(/id="([^"]+)"/g);
+                // replace IDs
+                [...matches].forEach(([, match], matchKey) => {
+                  html = html.replaceAll(
+                    match,
+                    `bg-id-${sectionKey}-${bgKey}-${sizeKey}-${matchKey}`
+                  );
                 });
-            });
+
+                element.innerHTML = html;
+                const svg = element.firstChild;
+
+                svg.classList.add(size || 'desktop');
+
+                background.append(svg);
+                $section.classList.add('has-bg');
+              });
+            }
+          );
         });
       }
       if (style.startsWith('bg-gradient') || style.startsWith('bg-solid')) {
@@ -473,7 +510,12 @@ export function buildBlock(blockName, content) {
  * @param {Element} block The block element
  */
 export async function loadBlock(block, eager = false) {
-  if (!(block.getAttribute('data-block-status') === 'loading' || block.getAttribute('data-block-status') === 'loaded')) {
+  if (
+    !(
+      block.getAttribute('data-block-status') === 'loading' ||
+      block.getAttribute('data-block-status') === 'loaded'
+    )
+  ) {
     block.setAttribute('data-block-status', 'loading');
     const blockName = block.getAttribute('data-block-name');
     try {
@@ -524,7 +566,12 @@ export async function loadBlocks(main) {
  * @param {boolean} eager load image eager
  * @param {Array} breakpoints breakpoints and corresponding params (eg. width)
  */
-export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 400px)', width: '2000' }, { width: '750' }]) {
+export function createOptimizedPicture(
+  src,
+  alt = '',
+  eager = false,
+  breakpoints = [{ media: '(min-width: 400px)', width: '2000' }, { width: '750' }]
+) {
   const url = new URL(src, window.location.href);
   const picture = document.createElement('picture');
   const { pathname } = url;
@@ -596,6 +643,7 @@ function decorateTemplateAndTheme() {
   if (theme) {
     const themeValues = theme.split(',').map((t) => t.trim());
     themeValues.forEach((t) => {
+      if (t.toLowerCase() === 'base') document.querySelector('main')?.setAttribute('id', 'base');
       document.body.classList.add(toClassName(t));
     });
   }
@@ -625,7 +673,7 @@ async function waitForLCP() {
   // eslint-disable-next-line no-use-before-define
   const lcpBlocks = LCP_BLOCKS;
   const block = document.querySelector('.block');
-  const hasLCPBlock = (block && lcpBlocks.includes(block.getAttribute('data-block-name')));
+  const hasLCPBlock = block && lcpBlocks.includes(block.getAttribute('data-block-name'));
   if (hasLCPBlock) await loadBlock(block, true);
 
   document.querySelector('body').classList.add('appear');
@@ -696,13 +744,29 @@ window.addEventListener('error', (event) => {
 window.addEventListener('load', () => sampleRUM('load'));
 
 document.addEventListener('click', (event) => {
-  sampleRUM('click', { target: sampleRUM.targetselector(event.target), source: sampleRUM.sourceselector(event.target) });
+  sampleRUM('click', {
+    target: sampleRUM.targetselector(event.target),
+    source: sampleRUM.sourceselector(event.target),
+  });
 });
 
 if (!window.hlx.suppressLoadPage) loadPage(document);
 
 export function formatDate(dateString) {
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   const [year, month, day] = dateString.split('-').map((n) => +n);
   return `${months[month - 1]} ${day}, ${year}`;
 }
@@ -724,13 +788,21 @@ export function decorateButtons(block = document) {
           $a.className = 'button accent'; // default
           $up.classList.add('button-container');
         }
-        if ($up.childNodes.length === 1 && $up.tagName === 'STRONG'
-            && $twoup.childNodes.length === 1 && $twoup.tagName === 'P') {
+        if (
+          $up.childNodes.length === 1 &&
+          $up.tagName === 'STRONG' &&
+          $twoup.childNodes.length === 1 &&
+          $twoup.tagName === 'P'
+        ) {
           $a.className = 'button accent';
           $twoup.classList.add('button-container');
         }
-        if ($up.childNodes.length === 1 && $up.tagName === 'EM'
-            && $twoup.childNodes.length === 1 && $twoup.tagName === 'P') {
+        if (
+          $up.childNodes.length === 1 &&
+          $up.tagName === 'EM' &&
+          $twoup.childNodes.length === 1 &&
+          $twoup.tagName === 'P'
+        ) {
           $a.className = 'button accent light';
           $twoup.classList.add('button-container');
         }
@@ -781,13 +853,19 @@ export function buildFigure(blockEl) {
   figEl.classList.add('figure');
   // content is picture only, no caption or link
   if (blockEl?.firstElementChild) {
-    if (blockEl.firstElementChild.nodeName === 'PICTURE' || blockEl.firstElementChild.nodeName === 'VIDEO') {
+    if (
+      blockEl.firstElementChild.nodeName === 'PICTURE' ||
+      blockEl.firstElementChild.nodeName === 'VIDEO'
+    ) {
       figEl.append(blockEl.firstElementChild);
     } else if (blockEl.firstElementChild.nodeName === 'P') {
       const pEls = Array.from(blockEl.children);
       pEls.forEach((pEl) => {
         if (pEl.firstElementChild) {
-          if (pEl.firstElementChild.nodeName === 'PICTURE' || pEl.firstElementChild.nodeName === 'VIDEO') {
+          if (
+            pEl.firstElementChild.nodeName === 'PICTURE' ||
+            pEl.firstElementChild.nodeName === 'VIDEO'
+          ) {
             figEl.append(pEl.firstElementChild);
           } else if (pEl.firstElementChild.nodeName === 'EM') {
             const figCapEl = buildCaption(pEl);
@@ -892,8 +970,11 @@ async function buildAutoBlocks(main) {
       }
     }
 
-    if (template === 'hr-glossary' || template === 'job-description'
-      || template === 'resources-guides') {
+    if (
+      template === 'hr-glossary' ||
+      template === 'job-description' ||
+      template === 'resources-guides'
+    ) {
       buildPageHeader(main, template);
     }
   } catch (error) {
@@ -967,7 +1048,6 @@ async function loadMartech() {
     }, timeout);
   }(window, document, "body {opacity: 0 !important}", 3000));
   */
-
   /* Move Adobe Tags here from delayed.js if Adobe Target is added and enabled */
 }
 
@@ -1133,7 +1213,15 @@ export function createElem(elemType, ...cssClass) {
  * @param {Element} block The block element
  */
 export function addWidthToParent(block) {
-  const widths = ['full-width', 'med-width', 'normal-width', 'small-width', 'medium-width', 'extra-wide', 'extra-small-width'];
+  const widths = [
+    'full-width',
+    'med-width',
+    'normal-width',
+    'small-width',
+    'medium-width',
+    'extra-wide',
+    'extra-small-width',
+  ];
   widths.some((w) => {
     const found = block.classList.contains(w);
     if (found) {

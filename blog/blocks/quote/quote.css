@@ -96,6 +96,10 @@ main .quote.full.image-200 .image {
   max-width: 12.5rem;
 }
 
+main .quote.full.image-360 .image {
+  max-width: 22.5rem;
+}
+
 main .quote.full.image-420 .image {
   max-width: 26.25rem;
 }

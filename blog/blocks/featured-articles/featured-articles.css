@@ -1,6 +1,5 @@
 main .featured-articles-container > div {
   max-width: 1200px;
-  padding: 0 30px;
 }
 
 main .featured-articles-card {
@@ -122,10 +121,6 @@ main .featured-articles-hero .featured-articles-card .featured-articles-card-bod
 }
 
 @media (min-width: 600px) {
-  main .featured-articles-container > div {
-    padding: 0 54px;
-  }
-
   main .featured-articles-row {
     margin: 0 -20px;
   }
@@ -160,10 +155,6 @@ main .featured-articles-hero .featured-articles-card .featured-articles-card-bod
 }
 
 @media (min-width: 1200px) {
- main .featured-articles-container > div {
-    padding: 0;
-  }
-
   main .featured-articles-row {
     display: flex;
   }

@@ -1,0 +1,32 @@
+.performance-reviews .gradient {
+  background: linear-gradient(to top, var(--secondary-theme-tint15) 0%, var(--color-white) 100%);
+}
+
+.performance-reviews .small-icons {
+  margin: 20px 0 10px;
+}
+
+.performance-reviews .small-icons img {
+  height: 50px;
+  width: auto;
+}
+
+.performance-reviews .columns.small-icons p:not(:first-of-type) {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--theme-shade10);
+}
+
+.performance-reviews .step.block .step-left {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--theme-shade5);
+}
+
+.performance-reviews .step.block .step-right {
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--theme-shade5);
+}

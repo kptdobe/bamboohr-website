@@ -15,6 +15,12 @@
   width: 100%;
 }
 
+.columns a:not(.button) {
+  font-weight: var(--heading-font-weight);
+  color: var(--theme-shade10);
+  background-image: linear-gradient(rgb(0 0 0 / 0%) 50%, var(--secondary-theme-tint10) 0);
+}
+
 .columns.columns-3-cols p,
 .columns.columns-4-cols p,
 .columns.listing-highlights p,
@@ -71,6 +77,10 @@
   font-weight: 700;
 }
 
+.column-small-icons-container {
+  padding-top: 30px;
+}
+
 .column-small-icons-container > div {
   position: relative;
 }
@@ -91,7 +101,8 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
-  color: var(--color-1-shade-5);
+  color: var(--theme-shade5);
+  border-radius: 0;
 }
 
 .home-more .columns a.button:any-link::after {
@@ -252,7 +263,7 @@ main .section > .card-wrapper {
   border-radius: 15px;
 }
 
-.columns.button-text-link p.button-container {
+.columns.button-style-link p.button-container {
   margin-top: 10px;
 }
 
@@ -497,7 +508,7 @@ div .column-small-icons-container {
   color: var(--theme-shade10);
 }
 
-.columns a.button:any-link {
+.columns a.button:not(.link):any-link {
   color: var(--theme-tint5);
   background-color: var(--theme-shade15);
 }
@@ -516,7 +527,7 @@ div .column-small-icons-container {
   letter-spacing: 1.5px;
   text-transform: uppercase;
   font-style: normal;
-  color: var(--color-gray-12)
+  color: var(--color-gray-12);
 }
 
 .columns.image-info .img-col[data-align='center'],

@@ -13,8 +13,10 @@
 
 @import 'style-vars.css';
 @import 'backgrounds.css';
+@import 'themes/base.css';
 @import 'templates/our-platform.css';
 @import 'templates/payroll-roi.css';
+@import 'templates/performance-reviews.css';
 @import 'templates/pricing-quote.css';
 @import 'templates/hr-experience-maker-awards.css';
 @import 'templates/hr-software.css';
@@ -80,23 +82,25 @@ a.button:any-link {
   font-weight: var(--heading-font-weight);
   cursor: pointer;
   color: var(--color-white);
-  background-color: var(--color-1);
+  background-color: var(--theme-base);
   margin: 16px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
+  transition: background-color 0.1s;
 }
 
 a.button:hover,
 a.button:focus {
-  background-color: var(--color-1);
+  background-color: var(--theme-shade5);
 }
 
+/* button link */
 a.button.link:any-link {
-  background-color: revert;
+  background-color: transparent !important;
   border-radius: revert;
-  color: var(--theme-shade5);
+  color: var(--theme-shade10);
   font-family: var(--body-font-family);
   font-size: 1rem;
   font-style: var(--heading-font-weight);
@@ -108,7 +112,7 @@ a.button.link:any-link {
   white-space: revert;
 }
 
-/* link caret styles */
+/* button link caret */
 a.button.link:any-link::after {
   background-color: currentcolor;
   content: '';
@@ -868,6 +872,7 @@ main .default-content-wrapper p a.button:any-link {
 .resources-guides main .quote-wrapper,
 .resources-guides main .cards-wrapper,
 .resources-guides main .columns-wrapper,
+main .center-page-cta-wrapper,
 .resources-guides main .image-wrapper:not(.background-image) {
   position: relative;
   z-index: 1;
@@ -1464,17 +1469,17 @@ body.modal-open {
 }
 
 .modal-wrapper {
-  width: 100vw;
-  height: 100vh;
   background-color: rgb(0 0 0 / 50%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   transition: all 0.1s ease-out;
   z-index: -1;
-  top: 0;
-  left: 0;
   opacity: 0;
   overflow-y: scroll;
 }
@@ -1485,19 +1490,27 @@ body.modal-open {
 }
 
 .modal {
+  width: 90%;
   max-width: 490px;
   background-color: var(--body-background-color);
   border-radius: 20px;
   position: absolute;
   top: 70px;
-  margin: 30px auto;
-  padding: 50px 40px;
+  margin: 0 auto;
+  padding: 50px 30px;
+}
+
+@media screen and (min-width: 900px) {
+  .modal {
+    padding: 50px 40px;
+		width: 80%;
+  }
 }
 
 .modal-close {
   position: absolute;
-  right: -28px;
-  top: -28px;
+  right: -22px;
+  top: -22px;
   display: flex;
   flex-direction: column;
   z-index: 1;

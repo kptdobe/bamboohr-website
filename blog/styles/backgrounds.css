@@ -367,16 +367,6 @@
   top: 0;
 }
 
-/* multi 1 */
-.has-bg > span.bg-bottom-multi-1 {
-  background-image: linear-gradient(
-    180deg,
-    transparent 0%,
-    var(--secondary-theme-tint15) 31.77%,
-    var(--secondary-theme-tint5) 100%
-  );
-}
-
 /* cap 3 tint */
 .has-bg > span.bg-bottom-cap-3-tint {
   background-image: linear-gradient(180deg, var(--color-white) 0%, var(--theme-tint15) 100%);
@@ -490,8 +480,8 @@
 }
 
 /*
-   * block
-   */
+* block
+*/
 .has-bg > .bg.bg-block-center-left-single-1 {
   top: 26%;
   left: -20%;

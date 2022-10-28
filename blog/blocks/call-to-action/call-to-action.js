@@ -7,12 +7,12 @@ export default function decorateBlock(block) {
       const elem = document.getElementById('call-to-action-modal');
       if (!elem) {
         const wrapper = document.createElement('div');
-        wrapper.className = 'call-to-action-modal-wrapper';
+        wrapper.className = 'modal-wrapper';
 
         const modal = document.createElement('div');
-        modal.className = 'call-to-action-modal';
+        modal.classList.add('modal', 'call-to-action-modal');
         modal.id = 'call-to-action-modal';
-        modal.innerHTML = '<div class="call-to-action-modal-close"></div>';
+        modal.innerHTML = '<div class="modal-close"></div>';
         const fragment = await loadFragment(a.dataset.modal);
         insertNewsletterForm(fragment, () => {
           wrapper.classList.remove('visible');
@@ -21,12 +21,15 @@ export default function decorateBlock(block) {
         wrapper.append(modal);
         block.append(wrapper);
         wrapper.classList.add('visible');
-        const close = modal.querySelector('.call-to-action-modal-close');
+        document.body.classList.add('modal-open');
+        const close = modal.querySelector('.modal-close');
         close.addEventListener('click', () => {
           wrapper.classList.remove('visible');
+          document.body.classList.remove('modal-open');
         });
       } else {
-        block.querySelector('.call-to-action-modal-wrapper').classList.add('visible');
+        block.querySelector('.modal-wrapper').classList.add('visible');
+        document.body.classList.add('modal-open');
       }
     });
     a.dataset.modal = new URL(a.href).pathname;

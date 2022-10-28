@@ -529,3 +529,89 @@ main .section .hero p.button-container {
     display: none;
   }
 }
+
+/* cards */
+
+/* example MQs */
+@media (min-width: 1800px) {
+  .hero-container.cards-2-column .hero-wrapper {
+    max-width: 1520px;
+  }
+}
+
+.hero.cards-2-column {
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 2.5rem 0;
+}
+
+@media (min-width: 1025px) {
+  .hero.cards-2-column {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 7.5rem 0;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero.cards-2-column > div:first-child,
+  .hero.cards-2-column > .cards {
+    width: 50%;
+  }
+}
+
+.hero.cards-2-column > div:first-child {
+  color: var(--theme-shade10);
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  .hero.cards-2-column > div:first-child {
+    text-align: center;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero.cards-2-column > div:first-child {
+    width: min(50%, 640px);
+  }
+}
+
+.hero.cards-2-column > div:first-child > h1 {
+  color: var(--theme-shade15);
+  font-size: 2.25rem;
+}
+
+@media (min-width: 600px) {
+  .hero.cards-2-column > div:first-child > h1 {
+    font-size: 3.375rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero.cards-2-column > div:first-child > h1 {
+    font-size: 4.375rem;
+    line-height: 1.1429;
+  }
+}
+
+.hero.cards-2-column > div:first-child > p {
+  font-weight: normal;
+}
+
+/* cards overrides */
+.hero.cards-2-column > .cards {
+  padding: 0;
+}
+
+@media (min-width: 1025px) {
+  .hero.cards-2-column > .cards {
+    width: min(50%, 740px);
+  }
+}
+
+.hero.cards-2-column > .cards .icon > svg {
+  color: var(--theme-shade10);
+  max-height: 2rem;
+  max-width: 2rem;
+}
