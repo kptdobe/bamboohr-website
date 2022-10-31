@@ -1,6 +1,5 @@
 main .article-feed-container > div {
   max-width: 1200px;
-  padding: 0 30px;
 }
 
 main .article-feed-card {
@@ -115,10 +114,6 @@ main .article-feed-large .article-feed-card-body p:first-of-type {
 }
 
 @media (min-width: 600px) {
-  main .article-feed-container > div {
-    padding: 0 54px;
-  }
-
   main .article-feed-card-grid {
     margin: 0 -20px;
   }
@@ -187,11 +182,5 @@ main .article-feed-large .article-feed-card-body p:first-of-type {
   main .article-feed-large .article-feed-card h3 {
     font-size: 30px;
     line-height: 36px;
-  }
-}
-
-@media (min-width: 1440px) {
-  main .article-feed-container > div {
-    padding: 0;
   }
 }

@@ -22,9 +22,6 @@ function findSplitSubType(val) {
 export default function decorate(block) {
   const cols = [...block.firstElementChild.children];
   block.classList.add(`columns-${cols.length}-cols`);
-  if (block.classList.contains('full-width')) block.parentElement.classList.add('full-width');
-  if (block.classList.contains('med-width')) block.parentElement.classList.add('med-width');
-  if (block.classList.contains('small-width')) block.parentElement.classList.add('small-width');
 
   if (block.classList.contains('small-icons')) {
     cols[0].parentElement.classList.add('column-small-icons-container');
@@ -43,9 +40,17 @@ export default function decorate(block) {
       cardWrapper.appendChild(cardBorder);
     });
   } else if (block.classList.contains('step')) {
-    cols[0].parentElement.classList.add('step-wrap');
-    cols[0].classList.add('step-left');
-    cols[1].classList.add('step-right');
+    const rows = [...block.children];
+    rows.forEach((row) => {
+      row.classList.add('step-wrap');
+      [...row.children].forEach((col, index) => {
+        if (index % 2 === 0) {
+          col.classList.add('step-left');
+        } else {
+          col.classList.add('step-right');
+        }
+      });
+    });
   } else if (cols.length === 2) {
     let splitVals = null;
     [...block.classList].some((c) => {
@@ -65,10 +70,19 @@ export default function decorate(block) {
           col.classList.add('img-col');
           hasImage = true;
         } else col.classList.add('non-img-col');
-        const button = col.querySelector('a.button');
-        if (button) {
-          button.classList.add('small');
-          button.parentElement.classList.add('left');
+        const isButtonLinks = block.classList.contains('button-style-link');
+        const buttons = col.querySelectorAll('a.button');
+
+        if (isButtonLinks) {
+          buttons.forEach((button) => {
+            button.classList.add('link');
+            button.parentElement.classList.add('left');
+          });
+        } else {
+          buttons.forEach((button) => {
+            button.classList.add('small');
+            button.parentElement.classList.add('left');
+          });
         }
       });
       if (!hasImage) colParent.classList.add('columns-align-start');
@@ -78,6 +92,14 @@ export default function decorate(block) {
         if (splitVals[0] !== '0') colParent.insertBefore(buildSplit(splitVals[0]), cols[0]);
         if (splitVals[3] && splitVals[3] !== '0') colParent.appendChild(buildSplit(splitVals[3]));
       }
+    }
+  } else if (cols.length === 1) {
+    if (block.classList.contains('button-style-link')) {
+      const buttons = block.querySelectorAll('a.button');
+      buttons.forEach((button) => {
+        button.classList.add('link');
+        button.parentElement.classList.add('left');
+      });
     }
   }
 

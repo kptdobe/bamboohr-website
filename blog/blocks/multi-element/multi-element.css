@@ -438,3 +438,101 @@ main .multi-element p {
 .multi-element.hero a.button:any-link:hover {
     background-color: var(--theme-shade10);
 }
+
+.multi-element.industry {
+    --row-gap: 14px;
+
+    position: relative;
+    padding-top: 70px;
+}
+
+.multi-element.industry h1 {
+    color: var(--theme-tint15);
+    margin-bottom: 24px;
+}
+
+.multi-element.industry .content p {
+    color: var(--theme-tint5);
+}
+
+.multi-element.industry .extra {
+    display: block;
+}
+
+.multi-element.industry .extra p {
+    color: var(--color-gray-10);
+    font-family: var(--body-font-family);
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+@media (max-width: 899px) {
+    .multi-element.hero.industry > .content {
+        gap: 0
+    }
+}
+
+@media (min-width: 600px) {
+    .multi-element.industry h1 {
+        margin-bottom: 14px;
+    }
+}
+
+@media (min-width: 769px) {
+    .multi-element.hero.industry {
+        --columns: repeat(12, 1fr);
+    }
+
+    .multi-element.hero.industry .content:first-child {
+        grid-column-end: span 6;
+    }
+
+    .multi-element.hero.industry .content:nth-child(2) {
+        grid-column-end: span 6;
+    }
+
+    .multi-element.hero.industry .extra {
+        position: absolute;
+        bottom: -30px;
+        right: 0;
+    }
+
+    .multi-element.industry .extra p {
+        color: var(--color-white);
+    }
+}
+
+@media (min-width: 900px) {
+    .multi-element.hero.industry {
+        padding-top: 10px;
+    }
+
+    .multi-element.hero.industry .content:first-child {
+        grid-column-start: 2;
+        padding-top: 40px;
+    }
+
+    .multi-element.hero.industry .content:nth-child(2) {
+        grid-column-end: span 5;
+    }
+
+    .multi-element.hero.industry .extra {
+        bottom: 0;
+        right: 45px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .multi-element.hero.industry .extra {
+        right: 20px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .multi-element.hero.industry .content picture img {
+        max-height: 550px;
+    }
+}

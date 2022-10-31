@@ -9,7 +9,7 @@ main .section > .related-posts-wrapper {
   background-repeat: no-repeat;
   background-position: top;
   background-size: contain;
-  padding: 150px 0;
+  padding: 150px 30px;
   margin-top: 100px;
 }
 
@@ -111,10 +111,20 @@ main .related-posts-card-body a:any-link::after {
   main .related-posts-card {
       width: 50%;
   }
+
+  main .section > .related-posts-wrapper {
+    padding: 150px 54px;
+  }
 }
 
 @media (min-width: 900px) {
   main .related-posts-card {
       width: 25%;
+  }
+}
+
+@media (min-width: 1440px) {
+  main .section > .related-posts-wrapper {
+    padding: 150px 0;
   }
 }

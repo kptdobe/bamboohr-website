@@ -13,12 +13,17 @@
 
 @import 'style-vars.css';
 @import 'backgrounds.css';
+@import 'themes/base.css';
+@import 'templates/our-platform.css';
 @import 'templates/payroll-roi.css';
+@import 'templates/performance-reviews.css';
 @import 'templates/pricing-quote.css';
 @import 'templates/hr-software.css';
 @import 'templates/hr-unplugged.css';
 @import 'templates/live-demo-webinars.css';
-@import 'templates/rippling-comparison.css';
+@import 'templates/bhr-comparison.css';
+@import 'templates/industry.css';
+@import 'templates/ee-solution.css';
 
 html {
   box-sizing: border-box;
@@ -76,17 +81,48 @@ a.button:any-link {
   font-weight: var(--heading-font-weight);
   cursor: pointer;
   color: var(--color-white);
-  background-color: var(--color-1);
+  background-color: var(--theme-base);
   margin: 16px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
+  transition: background-color 0.1s;
 }
 
 a.button:hover,
 a.button:focus {
-  background-color: var(--color-1);
+  background-color: var(--theme-shade5);
+}
+
+/* button link */
+a.button.link:any-link {
+  background-color: transparent !important;
+  border-radius: revert;
+  color: var(--theme-shade10);
+  font-family: var(--body-font-family);
+  font-size: 1rem;
+  font-style: var(--heading-font-weight);
+  font-weight: 700;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  white-space: revert;
+}
+
+/* button link caret */
+a.button.link:any-link::after {
+  background-color: currentcolor;
+  content: '';
+  display: inline-block;
+  height: 0.8125rem;
+  margin-left: 0.5rem;
+  mask-image: url('../styles/caret-right.svg');
+  /* stylelint-disable-next-line property-no-vendor-prefix */
+  -webkit-mask-image: url('../styles/caret-right.svg');
+  vertical-align: middle; /* TODO: replace with flex on button? */
+  width: 0.5rem;
 }
 
 /* small button style */
@@ -666,6 +702,18 @@ main .section {
   padding: 0 30px;
 }
 
+@media (min-width: 600px) {
+  main .section {
+    margin-top: 80px;
+  }
+}
+
+@media (min-width: 1025px) {
+  main .section {
+    margin-top: 96px;
+  }
+}
+
 main .section:first-of-type {
   padding-top: 0;
   margin-top: 0;
@@ -720,10 +768,12 @@ main .section > div:empty {
   }
 
   .resources-guides main .section > div.quote-wrapper.normal-width,
+  main .section > div.image-wrapper.normal-width,
   main .section > div.title-wrapper.normal-width {
     max-width: 760px;
   }
 
+  main .section > div.cards-wrapper.med-width,
   .resources-guides main .section > div.columns-wrapper.med-width,
   .resources-guides main .section > div.toc-wrapper,
   .resources-guides main .section > div.quote-wrapper,
@@ -736,7 +786,7 @@ main .section > div:empty {
 
   .resources-guides main .section > div.cards-wrapper.full-width,
   .resources-guides main .section > div.columns-wrapper.full-width,
-  .resources-guides main .section > div.image-wrapper.full-width,
+  main .section > div.image-wrapper.full-width,
   .resources-guides main .section > div.quote-wrapper.full-width,
   .resources-guides main .section > div.source-wrapper.full-width {
     max-width: 1160px;
@@ -758,9 +808,21 @@ main .section > div:empty {
   }
 }
 
+main .section.max-width-small > div {
+  max-width: 760px;
+}
+
 @media (min-width: 1800px) {
   main .section > div {
     max-width: 1520px;
+  }
+
+  main .section.max-width-medium > div {
+    max-width: 1300px;
+  }
+
+  main .section.max-width-small > div {
+    max-width: 1000px;
   }
 }
 
@@ -804,6 +866,7 @@ main .default-content-wrapper p a.button:any-link {
 .resources-guides main .quote-wrapper,
 .resources-guides main .cards-wrapper,
 .resources-guides main .columns-wrapper,
+main .center-page-cta-wrapper,
 .resources-guides main .image-wrapper:not(.background-image) {
   position: relative;
   z-index: 1;
@@ -1396,17 +1459,17 @@ body.modal-open {
 }
 
 .modal-wrapper {
-  width: 100vw;
-  height: 100vh;
   background-color: rgb(0 0 0 / 50%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   transition: all 0.1s ease-out;
   z-index: -1;
-  top: 0;
-  left: 0;
   opacity: 0;
   overflow-y: scroll;
 }
@@ -1417,19 +1480,27 @@ body.modal-open {
 }
 
 .modal {
+  width: 90%;
   max-width: 490px;
   background-color: var(--body-background-color);
   border-radius: 20px;
   position: absolute;
   top: 70px;
-  margin: 30px auto;
-  padding: 50px 40px;
+  margin: 0 auto;
+  padding: 50px 30px;
+}
+
+@media screen and (min-width: 900px) {
+  .modal {
+    padding: 50px 40px;
+		width: 80%;
+  }
 }
 
 .modal-close {
   position: absolute;
-  right: -28px;
-  top: -28px;
+  right: -22px;
+  top: -22px;
   display: flex;
   flex-direction: column;
   z-index: 1;
@@ -1470,7 +1541,7 @@ body.modal-open {
 }
 
 .modal .modal-form-title {
-  color: var(--color-1);
+  color: var(--theme-shade10);
   font-style: italic;
   text-align: center;
 }
@@ -1483,7 +1554,7 @@ body.modal-open {
 
 .modal .modal-form-subtitle {
   text-align: center;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 /* above the fold CSS goes here to squash CLS */

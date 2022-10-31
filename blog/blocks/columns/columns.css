@@ -3,8 +3,27 @@
   flex-direction: column;
 }
 
+.columns-wrapper.medium-width {
+  max-width: 1300px;
+}
+
+.columns-wrapper.small-width {
+  max-width: 1000px;
+}
+
 .columns img {
   width: 100%;
+}
+
+.columns a:not(.button) {
+  font-weight: var(--heading-font-weight);
+  color: var(--theme-shade10);
+  background-image: linear-gradient(rgb(0 0 0 / 0%) 50%, var(--secondary-theme-tint10) 0);
+}
+
+.columns a.button:not(.link):any-link {
+  color: var(--theme-tint5);
+  background-color: var(--theme-shade15);
 }
 
 .columns.columns-3-cols p,
@@ -34,7 +53,7 @@
 
 .cards-col a.button:any-link {
   color: #1087cc;
-  font-family: "Red Hat Text", Arial, Helvetica, sans-serif;
+  font-family: 'Red Hat Text', Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 12px;
   line-height: 15px;
@@ -63,11 +82,15 @@
   font-weight: 700;
 }
 
+.column-small-icons-container {
+  padding-top: 30px;
+}
+
 .column-small-icons-container > div {
   position: relative;
 }
 
-.column-small-icons-container .button::after {
+.column-small-icons-container a::after {
   position: absolute;
   top: 0;
   right: 0;
@@ -75,7 +98,7 @@
   left: 0;
   z-index: 1;
   pointer-events: auto;
-  content: "";
+  content: '';
   background-color: rgba(0 0 0 0%);
 }
 
@@ -83,11 +106,13 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
-  color: var(--color-1-shade-5);
+  color: var(--theme-shade5);
+  background-color: transparent;
+  border-radius: 0;
 }
 
 .home-more .columns a.button:any-link::after {
-  content: "";
+  content: '';
   border: solid var(--heading-color);
   border-width: 0 2.5px 2.5px 0;
   display: inline-block;
@@ -231,7 +256,7 @@ main .section > .card-wrapper {
 
 .cards-col .button-container::after {
   margin-left: 10px;
-  content: url("https://www.bamboohr.com/images/icons/color5-shade5-right-arrow.svg");
+  content: url('https://www.bamboohr.com/images/icons/color5-shade5-right-arrow.svg');
 }
 
 .cards-border {
@@ -242,6 +267,10 @@ main .section > .card-wrapper {
   left: -10px;
   background: linear-gradient(120deg, #5cc8ff 13.4%, #a168ff 86.6%);
   border-radius: 15px;
+}
+
+.columns.button-style-link p.button-container {
+  margin-top: 10px;
 }
 
 .columns.step .step-wrap {
@@ -465,4 +494,44 @@ div .column-small-icons-container {
 
 .column-flex-container > div > picture {
   display: block;
+}
+
+.columns.title1-heading h2 {
+  font-family: var(--heading-font-family);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 30px;
+  margin: 0 0 30px;
+  font-style: normal;
+  color: var(--theme-shade5);
+}
+
+.columns.gray-heading h2 {
+  color: var(--color-gray-12);
+}
+
+.columns .non-img-col ul li strong {
+  color: var(--theme-shade10);
+}
+
+.columns .img-col h3 {
+  color: var(--color-gray-10);
+  font-style: normal;
+}
+
+.columns.image-info .img-col em,
+.columns .img-col em {
+  font-family: var(--body-font-family);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-style: normal;
+  color: var(--color-gray-12);
+}
+
+.columns.image-info .img-col[data-align='center'],
+.columns .img-col[data-align='center'] {
+  text-align: center;
 }

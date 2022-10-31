@@ -96,6 +96,12 @@ main .section .center-page-cta .button-container {
     padding: .625rem 1.875rem;
 }
 
+@media (max-width: 599px) {
+    main .center-page-cta p {
+        margin-bottom: 10px;
+    }
+}
+
 @media (min-width: 600px) {
     .center-page-cta .button-container > a.button:any-link {
         font-size: 1.0625rem;

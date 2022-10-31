@@ -1,0 +1,46 @@
+.our-platform main .section .cards-wrapper {
+  max-width: 1520px;
+}
+
+.our-platform h1 {
+  font-weight: 900;
+  font-size: 70px;
+  line-height: 80px;
+  color: var(--theme-shade10);
+}
+
+.our-platform main .section {
+  margin-top: 64px;
+  padding: 0 30px;
+}
+
+@media (min-width: 600px) {
+  .our-platform main .section {
+    margin-top: 128px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .our-platform main .section {
+    margin-top: 192px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .our-platform main .section {
+    margin-top: 224px;
+  }
+}
+
+.our-platform .small-icons img {
+  margin: 0;
+}
+
+.our-platform .columns.small-icons a.button:any-link,
+.our-platform .columns.small-icons a:any-link {
+  color: var(--color-gray-9);
+  line-height: 1.5;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 400;
+}

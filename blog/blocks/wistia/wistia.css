@@ -1,0 +1,88 @@
+.block.wistia {
+    display: flex;
+    justify-content: center;
+}
+
+.block.wistia picture {
+    --button-size: 5rem;
+    --radius: .5rem;
+    --width: 26.5rem;
+
+    background-color: var(--color-gray-2);
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: grid;
+    overflow: hidden;
+    max-width: var(--width);
+}
+
+@media (min-width: 769px) {
+    .block.wistia picture {
+        --radius: 1rem;
+        --width: 47.5rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .block.wistia picture {
+        --width: 62.5rem;
+    }
+}
+
+.block.wistia picture img {
+    width: 100%;
+}
+
+.block.wistia picture img,
+.block.wistia picture::before,
+.block.wistia picture::after {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+
+.block.wistia picture::before,
+.block.wistia picture::after {
+    content: '';
+    place-self: center;
+    z-index: 1;
+}
+
+/* circle */
+.block.wistia picture::before {
+    background-color: rgba(255 255 255 / 50%);
+    border-radius: 50%;
+    height: var(--button-size);
+    width: var(--button-size);
+}
+
+/* triangle */
+.block.wistia picture::after {
+    --height: calc(var(--button-size) * .4);
+
+    border: solid transparent;
+    border-left-color: var(--color-white);
+    border-width: calc(var(--height) / 2) 0 calc(var(--height) / 2) calc(var(--height) * .8656);
+    margin-left: calc(var(--height) / 4);
+}
+
+/* modal */
+.wistia-modal .modal {
+    border-radius: 1rem;
+    max-width: none;
+    padding: 1rem;
+}
+
+/* embed */
+.wistia-modal .modal-content > div {
+    --width: 85vw;
+
+    height: calc(var(--width) * .5625);/* default = 16:9 */
+    width: var(--width);
+}
+
+@media (min-width: 1025px) {
+    .wistia-modal .modal-content > div {
+        --width: 75vw;
+    }
+}

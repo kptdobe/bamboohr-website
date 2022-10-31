@@ -10,3 +10,8 @@ sitemaps:
     origin: https://www.bamboohr.com
     source: /integrations/query-index.json
     destination: /integrations/sitemap.xml
+
+  hrGlossary:
+      origin: https://www.bamboohr.com
+      source: /hr-glossary/query-index.json
+      destination: /hr-glossary/sitemap.xml

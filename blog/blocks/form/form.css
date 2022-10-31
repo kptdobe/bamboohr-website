@@ -256,7 +256,7 @@ main .form .mktoForm .mktoButton {
   line-height: 1.2;
   font-family: var(--heading-font-family);
   font-weight: 700;
-  background-color: var(--color-1);
+  background-color: var(--theme-shade10);
   color: var(--color-white);
   border-radius: 100px;
   border: none;

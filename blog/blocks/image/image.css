@@ -3,6 +3,7 @@ main .image {
 }
 
 main .image .figure {
+  max-width: 1200px;
   margin-top: 16px;
   margin-bottom: 16px;
   text-align: center;
@@ -15,6 +16,18 @@ main .image .figure {
   }
 }
 
+main .section > .image-wrapper {
+  max-width: 1200px;
+}
+
+main .section > .image-wrapper.content-width-full {
+  max-width: 100%;
+}
+
+.image-wrapper.content-width-full img {
+  width: 100%;
+}
+
 main .image .figure img {
   max-width: 100%;
   max-height: 600px;
@@ -23,6 +36,27 @@ main .image .figure img {
 main .image-list {
   display: flex;
   flex-direction: column;
+}
+
+main .image.center {
+  display: flex;
+  justify-content: center;
+}
+
+main .image.image-130 img {
+  max-width: 8.125rem;
+}
+
+main .image.margin-bottom-none {
+  margin-bottom: 0;
+}
+
+main .image.margin-top-none {
+  margin-top: 0;
+}
+
+main .image.margin-none {
+  margin: 0;
 }
 
 main .image.shadow {
@@ -77,11 +111,13 @@ main .image-list .figure img {
   min-width: unset;
 }
 
-main .image.right, main .image.left {
+main .image.right,
+main .image.left {
   line-height: 0;
 }
 
-main .image.right img, main .image.left img {
+main .image.right img,
+main .image.left img {
   border-radius: 15px;
   box-shadow: var(--box-shadow-2);
   box-sizing: border-box;
@@ -122,7 +158,8 @@ main .image p:not(:only-child):nth-child(1) {
 }
 
 @media (min-width: 900px) {
-  main .image.right, main .image.left {
+  main .image.right,
+  main .image.left {
     margin: 20px;
   }
 
@@ -132,17 +169,6 @@ main .image p:not(:only-child):nth-child(1) {
 
   main .image.left {
     float: left;
-  }
-}
-
-
-@media (min-width: 1200px) {
-  main .section > .image-wrapper {
-    max-width: 1200px;
-  }
-
-  main .image .figure {
-    max-width: 1200px;
   }
 }
 

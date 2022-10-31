@@ -1,76 +1,79 @@
 main .toc {
-    color: var(--category-color);
-    background-color: var(--category-bg-color);
-    text-decoration: none;
-    margin: 40px 0;
-    padding: 50px;
-    border-radius: 20px;
+  color: var(--category-color);
+  background-color: var(--category-bg-color);
+  text-decoration: none;
+  margin: 40px 0;
+  padding: 50px;
+  border-radius: 20px;
 }
 
 main .toc a:any-link {
-    color: var(--category-darker-color);
-    background-color: var(--category-bg-color);
-    text-decoration: none;
+  color: var(--category-darker-color);
+  background-color: var(--category-bg-color);
+  text-decoration: none;
 }
 
 main .toc .toc-title {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
 }
 
 main .toc ol {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 main .toc li {
-    margin-left: 0;
-    font-size: 15px;
-    line-height: 26px;
-    position: relative;
-    padding-left: 30px;
+  margin-left: 0;
+  font-size: 15px;
+  line-height: 26px;
+  position: relative;
+  padding-left: 30px;
 }
 
 main .toc > ol > li {
-    counter-increment: li;
+  counter-increment: li;
 }
 
 main .toc li:not(:first-child) {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 main .toc > ol > li::before {
-    content: counter(li) '.';
-    padding-right: 20px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-weight: 700;
-    font-family: var(--font-heading-family);
+  content: counter(li) '.';
+  padding-right: 20px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  font-family: var(--font-heading-family);
 }
 
 @media (min-width: 600px) {
-    main .toc .toc-title {
-      font-size: 18px;
-    }
+  main .toc .toc-title {
+    font-size: 18px;
+  }
 
-    main .toc > ol {
-        columns: 200px 2;        
-    }
+  main .toc > ol {
+    columns: 200px 2;
+  }
 
-    main .toc li {
-        font-size: 17px;
-        line-height: 28px;
-    }
+  main .toc.stack > ol {
+    columns: unset;
+  }
 
-    main .toc > ol > ol {
-        margin-top: 0;
-    }
+  main .toc li {
+    font-size: 17px;
+    line-height: 28px;
+  }
 
-    .resources-guides main .toc > ol > ol {
-        padding-left: 40px;
-    }
-}  
-  
+  main .toc > ol > ol {
+    margin-top: 0;
+  }
+
+  .resources-guides main .toc > ol > ol {
+    padding-left: 40px;
+  }
+}

@@ -1,0 +1,110 @@
+.benefits-container {
+    overflow: hidden;
+}
+
+.benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    justify-content: center;
+}
+
+.benefits > .title {
+    align-items: center;
+    display: flex;
+    flex: 0 1 100%;
+    justify-content: center;
+}
+
+@media (max-width: 1024px) {
+    .benefits > .title {
+        min-height: 25rem;
+        text-align: center;
+    }
+}
+
+@media (min-width: 1025px) {
+    .benefits > .title {
+        flex-basis: calc(50% - 5rem);
+    }
+}
+
+.benefits > .title > h2 {
+    color: var(--theme-shade10);
+    max-width: 28rem;
+}
+
+.benefits > .title > .bg {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+}
+
+@media (max-width: 599px) {
+    .benefits > .title > .bg {
+        max-width: 23rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .benefits > .title > .bg {
+        transform: translateX(-75%);
+    }
+}
+
+.benefits > .benefits-col-1,
+.benefits > .benefits-col-2 {
+    align-items: center;
+    display: flex;
+    flex: 0 1 100%;
+    flex-direction: column;
+    gap: 3rem;
+    justify-content: center;
+}
+
+@media (min-width: 600px) {
+    .benefits > .benefits-col-1,
+    .benefits > .benefits-col-2 {
+        flex-basis: calc(50% - 1.5rem);
+    }
+}
+
+@media (min-width: 1025px) {
+    .benefits > .benefits-col-1,
+    .benefits > .benefits-col-2 {
+        flex-basis: 25%;
+    }
+}
+
+.benefits .benefit {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    justify-content: center;
+    text-align: center;
+    max-width: 16.25rem;
+}
+
+.benefits .benefit > .icon {
+    color: var(--theme-shade10);
+}
+
+.benefits .benefit > .icon > svg {
+    max-height: 2rem;
+    width: auto;
+}
+
+.benefits .benefit > h3 {
+    color: var(--theme-shade5);
+    font-family: var(--body-font-family);
+    font-size: 1rem;
+    font-style: normal;
+    letter-spacing: .125rem;
+    line-height: 1.5;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.benefits .benefit > p {
+    margin: 0;
+}
