@@ -992,6 +992,8 @@ async function buildAutoBlocks(main) {
       }
     }
 
+    loadCSS(`${window.hlx.codeBasePath}/styles/templates/${template}.css`);
+
     if (
       template === 'hr-glossary' ||
       template === 'job-description' ||
