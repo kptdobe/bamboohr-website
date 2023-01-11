@@ -51,6 +51,11 @@ const createMetadata = (main, document, url) => {
     }).filter(p => p).join(', ');
   }
 
+  const author = document.querySelector('.academyCourseAuthor__name');
+  if (author) {
+    meta.Author = author.textContent;
+  }
+
   const block = WebImporter.Blocks.getMetadataBlock(document, meta);
   main.append(block);
 
@@ -111,7 +116,7 @@ export default {
       '.Footer',
     ]);
 
-    const main = document.querySelector('.topSection');
+    const main = document.querySelector('.topSection') || document.querySelector('.academyCourseMain');
 
     cleanupHeadings(main, document);
 
