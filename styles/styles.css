@@ -281,7 +281,8 @@ main .columns ul {
 
 main .default-content-wrapper ul li,
 main .tabs ul li,
-main .columns ul li {
+main .columns ul li,
+main .form ul li {
   position: relative;
   margin-bottom: 16px;
   list-style-image: var(--theme-bullet-level1);
@@ -290,7 +291,8 @@ main .columns ul li {
 
 main .default-content-wrapper ul li ul li,
 main .tabs ul li ul li,
-main .columns ul li ul li {
+main .columns ul li ul li,
+main .form ul li ul li {
   list-style-image: var(--theme-bullet-level2);
 }
 

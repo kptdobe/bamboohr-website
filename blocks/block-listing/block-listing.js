@@ -1,13 +1,77 @@
 import {
   loadFragment,
   lookupPages,
-  createOptimizedPicture,
   fetchPlaceholders,
   readBlockConfig,
   toCamelCase,
   toCategory,
+  toClassName,
 } from '../../scripts/scripts.js';
 import { createAppCard, sortOptions } from '../app-cards/app-cards.js';
+
+function addGroupLabel(groupName, parentContainer) {
+  const groupLabel = document.createElement('h2');
+  groupLabel.classList = 'block-group-label';
+  groupLabel.innerHTML = groupName;
+  parentContainer.append(groupLabel);
+}
+
+function addEndGroupLabel(groupName, parentContainer, siblingContainer = null) {
+  const endGroupLabel = document.createElement('h6');
+  endGroupLabel.classList = 'block-end-group-label';
+  endGroupLabel.innerHTML = `- end ${groupName} group -`;
+  if (siblingContainer) parentContainer.insertBefore(endGroupLabel, siblingContainer);
+  else parentContainer.append(endGroupLabel);
+}
+
+async function addBlockLinks(parentContainer, blockName) {
+  const noLinks = ['container-backgrounds'];
+  const blockLinks = document.createElement('div');
+  blockLinks.classList = 'block-links';
+  parentContainer.append(blockLinks);
+
+  const blockNameSanitized = toClassName(blockName);
+  if (!noLinks.includes(blockNameSanitized)) {
+    // Add links
+    let collection = 'blockTracker';
+    lookupPages([], collection, blockNameSanitized).then(results => {
+      const collectionCache = `${collection}${blockNameSanitized}`;
+      const trackerListings = window.pageIndex[collectionCache];
+
+      const uniqueLinks = [];
+      trackerListings.data.forEach(l => {
+        if (l && !uniqueLinks.find(u => u.Title === l.Title)) uniqueLinks.push(l);
+      });
+
+      const blockLinksLabel = document.createElement('h3');
+      blockLinksLabel.classList = 'block-links-label';
+      blockLinksLabel.innerHTML = `The ${blockName} block is used on ${uniqueLinks.length} pages:`;
+      blockLinks.append(blockLinksLabel);
+
+      // const limitedUniqueLinks = uniqueLinks.filter((l, index) => index < 10);
+
+      uniqueLinks.some((link, index) => {
+        const blockExampleLink = document.createElement('a');
+        blockExampleLink.className = 'block-example-link';
+        //blockExampleLink.href = '#'; // link.path
+        blockExampleLink.textContent = link.Title;
+
+        blockLinks.append(blockExampleLink);
+
+        // For now only show 10
+        return index >= 9;
+      });
+
+      // Add a separator
+      const sepContainer = document.createElement('div');
+      sepContainer.classList = 'block-links-sep';
+      const sep = document.createElement('hr');
+      sep.classList = 'separator-horiz-line';
+      sepContainer.append(sep);
+      blockLinks.append(sepContainer);
+    });
+  }
+}
 
 function getBlockHTML(ph) {
   return /* html */ `
@@ -170,21 +234,31 @@ export default async function decorate(block, blockName) {
     resultsElement.innerHTML = '';
     let lastGroup = '';
     const isSortedByGroup = document.getElementById('block-listing-sortby')?.dataset?.sort === 'group';
-    results.forEach(async (product) => {
-      // const fragment = await loadFragment(product.path);
-      const fragmentContainer = document.createElement('div');
-      resultsElement.append(fragmentContainer);
+    results.forEach(async (product, index) => {
+      const blockContainer = document.createElement('div');
+      blockContainer.classList = 'block-container';
+      resultsElement.append(blockContainer);
 
       if (isSortedByGroup && product.group && product.group !== product.block &&
           lastGroup !== product.group) {
-        // Add group title.
-        const groupTitle = document.createElement('h2');
-        groupTitle.innerHTML = product.group;
-        fragmentContainer.append(groupTitle);
+        if (lastGroup) addEndGroupLabel(lastGroup, resultsElement, blockContainer);
+        addGroupLabel(product.group, blockContainer);
+        if (index === results.length - 1) addEndGroupLabel(product.group, resultsElement);
+
         lastGroup = product.group;
+      } else if (isSortedByGroup && lastGroup &&
+                ((lastGroup !== product.group) || index === results.length - 1)) {
+        const siblingContainer = index === results.length - 1 ? null : blockContainer;
+        addEndGroupLabel(lastGroup, resultsElement, siblingContainer);
+
+        lastGroup = '';
       }
 
-      loadFragment(product.path).then(fragment => fragmentContainer.append(fragment));
+      // Load the block fragment
+      loadFragment(product.path).then(fragment => {
+        blockContainer.append(fragment);
+        addBlockLinks(blockContainer, product.block);
+      });
     });
 
     window.setTimeout(() => {

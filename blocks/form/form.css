@@ -288,10 +288,11 @@ main .form.white-container .form-col {
   border-radius: 15px;
   padding: 40px;
   box-shadow: var(--box-shadow-2);
+  height: fit-content;
 }
 
 main .form.white-container .form-col strong {
-  color: var(--color-1-shade-15);
+  color: var(--theme-shade10);
 }
 
 main .form.white-container .form-col p {
