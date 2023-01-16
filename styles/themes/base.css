@@ -141,6 +141,7 @@
 }
 
 #base .section > div.content-width-lg,
+#base .section > div.content-width-lg .form,
 #base .section.content-width-lg > div:not([class*='content-width-']) {
   max-width: calc(1160px + var(--section-padding-mobile) * 2);
 }

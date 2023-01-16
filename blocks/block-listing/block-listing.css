@@ -437,6 +437,26 @@ main .block-listing-results .listing-card-detail a::after {
     max-width: unset;
 }
 
+.block-group-label {
+  font-family: var(--heading-font-family);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 44px;
+  text-align: center;
+}
+
+.block-end-group-label {
+    text-align: center;
+}
+
+.block-example-link {
+    display: block;
+}
+
+.block-links-sep {
+    margin-top: 30px;
+}
+
 @media (min-width: 487px) {
     .listing-group:not(:first-child) {
         margin-top: 60px;
@@ -583,6 +603,11 @@ main .block-listing-results .listing-card-detail a::after {
     main .block-listing-results .listing-card:hover .listing-card-detail a:any-link {
         opacity: 1;
         transform: translateX(0);
+    }
+
+    .block-group-label {
+        font-size: 48px;
+        line-height: 60px;
     }
 }
 

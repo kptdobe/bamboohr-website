@@ -909,31 +909,33 @@ export function buildFigure(blockEl) {
   return figEl;
 }
 
-export async function lookupPages(pathnames, collection) {
+export async function lookupPages(pathnames, collection, sheet = '') {
   const indexPaths = {
     blog: '/blog/fixtures/blog-query-index.json',
     integrations: '/integrations/query-index.json?sheet=listings',
     hrGlossary: '/resources/hr-glossary/query-index.json',
     hrvs: '/resources/events/hr-virtual/2022/query-index.json',
     blockInventory: '/blocks/query-index.json',
+    blockTracker: `/website-marketing-resources/block-inventory-tracker.json?sheet=${sheet}`,
   };
   const indexPath = indexPaths[collection];
+  const collectionCache = `${collection}${sheet}`;
   window.pageIndex = window.pageIndex || {};
-  if (!window.pageIndex[collection]) {
+  if (!window.pageIndex[collectionCache]) {
     const resp = await fetch(indexPath);
     const json = await resp.json();
     const lookup = {};
     json.data.forEach((row) => {
       lookup[row.path] = row;
     });
-    window.pageIndex[collection] = { data: json.data, lookup };
+    window.pageIndex[collectionCache] = { data: json.data, lookup };
   }
 
   /* guard for legacy URLs */
   pathnames.forEach((path, i) => {
     if (path.endsWith('/')) pathnames[i] = path.substr(0, path.length - 1);
   });
-  const { lookup } = window.pageIndex[collection];
+  const { lookup } = window.pageIndex[collectionCache];
   const result = pathnames.map((path) => lookup[path]).filter((e) => e);
   return result;
 }
@@ -1144,6 +1146,7 @@ export async function loadFragment(path) {
     main.innerHTML = await resp.text();
     await decorateMain(main);
     await loadBlocks(main);
+    decorateIcons(main);
   }
   return main;
 }
